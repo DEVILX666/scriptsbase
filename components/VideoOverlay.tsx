@@ -71,7 +71,7 @@ async function getCountryCode(): Promise<string> {
 export function VideoOverlay({ game, onContinue }: VideoOverlayProps) {
   const [language, setLanguage] = useState<string>('en')
   const [isButtonEnabled, setIsButtonEnabled] = useState(false)
-  const [timeRemaining, setTimeRemaining] = useState<number>(3)
+  const [timeRemaining, setTimeRemaining] = useState<number>(110)
   const timerRef = useRef<NodeJS.Timeout | null>(null)
 
   useEffect(() => {
@@ -92,7 +92,7 @@ export function VideoOverlay({ game, onContinue }: VideoOverlayProps) {
 
   useEffect(() => {
     setIsButtonEnabled(false)
-    setTimeRemaining(110)
+    setTimeRemaining(3)
 
     timerRef.current = setInterval(() => {
       setTimeRemaining((prev) => {
