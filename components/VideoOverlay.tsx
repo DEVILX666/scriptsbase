@@ -148,7 +148,7 @@ export function VideoOverlay({ game, onContinue }: VideoOverlayProps) {
             {currentTranslation.title}
           </h1>
           <p className="text-xs sm:text-sm text-gray-300 mt-1">
-            Watch the video till the end
+            {currentTranslation.watchText || "Watch the video till the end"}
           </p>
           <p className="text-lg sm:text-xl mt-1">👇</p>
         </header>
