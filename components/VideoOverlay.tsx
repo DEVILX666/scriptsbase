@@ -92,7 +92,7 @@ export function VideoOverlay({ game, onContinue }: VideoOverlayProps) {
 
   useEffect(() => {
     setIsButtonEnabled(false)
-    setTimeRemaining(3)
+    setTimeRemaining(110)
 
     timerRef.current = setInterval(() => {
       setTimeRemaining((prev) => {
