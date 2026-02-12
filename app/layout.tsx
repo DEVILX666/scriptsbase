@@ -1,16 +1,14 @@
 import React from "react"
 import type { Metadata, Viewport } from 'next'
 import { JetBrains_Mono } from 'next/font/google'
-import { Analytics } from '@vercel/analytics/react'
 
 import './globals.css'
 
 const _jetbrainsMono = JetBrains_Mono({ subsets: ['latin'], variable: '--font-mono' })
 
 export const metadata: Metadata = {
-  title: 'ScriptsBase - Premium Roblox Scripts Hub',
-  description:
-    'Access premium Roblox scripts. All games, all scripts, one place.',
+  title: 'ScriptsZone - Premium Roblox Scripts Hub',
+  description: 'Access premium Roblox scripts for free. All games, all scripts, one place.',
   generator: 'v0.app',
   icons: {
     icon: 'https://i.imgur.com/CHpcON0.png',
@@ -46,7 +44,6 @@ export default function RootLayout({
       </head>
       <body className="antialiased bg-black overflow-hidden" suppressHydrationWarning>
         {children}
-        <Analytics />
       </body>
     </html>
   )
