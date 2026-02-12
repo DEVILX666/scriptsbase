@@ -7,8 +7,8 @@ import './globals.css'
 const _jetbrainsMono = JetBrains_Mono({ subsets: ['latin'], variable: '--font-mono' })
 
 export const metadata: Metadata = {
-  title: 'ScriptsZone - Premium Roblox Scripts Hub',
-  description: 'Access premium Roblox scripts for free. All games, all scripts, one place.',
+  title: 'ScriptsBase - Premium Roblox Scripts Hub',
+  description: 'Access premium Roblox scripts, All games, all scripts, one place.',
   generator: 'v0.app',
   icons: {
     icon: 'https://i.imgur.com/CHpcON0.png',
