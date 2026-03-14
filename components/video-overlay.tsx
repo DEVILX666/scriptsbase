@@ -2,7 +2,9 @@
 
 import { useEffect, useState, useRef } from "react"
 import { Button } from "@/components/ui/button"
+import { ChevronLeft, ChevronRight } from "lucide-react"
 import { translations, countryToLanguage } from "@/lib/translations"
+import Image from "next/image"
 
 interface VideoOverlayProps {
   isOpen: boolean
@@ -72,7 +74,14 @@ export function VideoOverlay({ isOpen, onClose, onContinue, lockerUrl, gameName 
   const [language, setLanguage] = useState<string>("en")
   const [isButtonEnabled, setIsButtonEnabled] = useState(false)
   const [timeRemaining, setTimeRemaining] = useState<number>(140)
+  const [currentImageIndex, setCurrentImageIndex] = useState(0)
   const timerRef = useRef<NodeJS.Timeout | null>(null)
+
+  const scriptImages = [
+    "/scripts pic 1.png",
+    "/scripts pic 2.png",
+    "/scripts pic 3.png",
+  ]
 
   useEffect(() => {
     if (!isOpen) return
@@ -94,7 +103,8 @@ export function VideoOverlay({ isOpen, onClose, onContinue, lockerUrl, gameName 
     if (!isOpen) return
 
     setIsButtonEnabled(false)
-    setTimeRemaining(95)
+    setTimeRemaining(10)
+    setCurrentImageIndex(0)
     
     timerRef.current = setInterval(() => {
       setTimeRemaining((prev) => {
@@ -122,6 +132,18 @@ export function VideoOverlay({ isOpen, onClose, onContinue, lockerUrl, gameName 
     }
   }
 
+  const handlePrevious = () => {
+    setCurrentImageIndex((prev) => 
+      prev === 0 ? scriptImages.length - 1 : prev - 1
+    )
+  }
+
+  const handleNext = () => {
+    setCurrentImageIndex((prev) => 
+      prev === scriptImages.length - 1 ? 0 : prev + 1
+    )
+  }
+
   const formatTime = (seconds: number): string => {
     const mins = Math.floor(seconds / 60)
     const secs = seconds % 60
@@ -129,19 +151,6 @@ export function VideoOverlay({ isOpen, onClose, onContinue, lockerUrl, gameName 
   }
 
   const currentTranslation = translations[language] || translations.en
-
-  // Determine video URL based on game name
-  const getVideoUrl = () => {
-    const gameNameLower = gameName.toLowerCase()
-    
-    if (gameNameLower.includes("tsunami") || gameNameLower.includes("escape tsunami")) {
-      return "https://streamable.com/e/aunk0f?nocontrols=0"
-    } else if (gameNameLower.includes("rivals")) {
-      return "https://streamable.com/e/dm6xl8?nocontrols=0"
-    } else {
-      return "https://streamable.com/e/3meq0b?nocontrols=0"
-    }
-  }
 
   if (!isOpen) return null
 
@@ -151,24 +160,49 @@ export function VideoOverlay({ isOpen, onClose, onContinue, lockerUrl, gameName 
         {/* Header */}
         <header className="bg-gradient-to-r from-primary/20 to-secondary/20 border-b border-border/50 px-3 py-2 sm:py-3 text-center flex-shrink-0">
           <h1 className="text-sm sm:text-xl font-bold text-foreground truncate">{currentTranslation.title}</h1>
-          <p className="text-xs sm:text-sm text-muted-foreground mt-1">
-            {currentTranslation.watchText || "Watch the video till the end"}
-          </p>
-          <p className="text-lg sm:text-xl mt-1">👇</p>
+          <p className="text-lg sm:text-xl mt-2">👇</p>
         </header>
 
-        {/* Video fills remaining space */}
-        <div className="flex-1 bg-black flex items-center justify-center">
-          <iframe
-            src={getVideoUrl()}
-            allowFullScreen
-            title="Premium Scripts Tutorial"
-            className="w-full h-full"
-            style={{ border: "none", display: "block" }}
-          />
+        {/* Image Gallery with Navigation */}
+        <div className="flex-1 bg-black flex flex-col items-center justify-center relative overflow-hidden">
+          <div className="relative w-full h-full flex items-center justify-center">
+            {/* Previous Button */}
+            <button
+              onClick={handlePrevious}
+              className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 z-20 bg-primary/80 hover:bg-primary p-2 sm:p-3 rounded-full transition-all duration-200 hover:scale-110 flex items-center justify-center"
+              aria-label="Previous image"
+            >
+              <ChevronLeft className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
+            </button>
+
+            {/* Current Image */}
+            <div className="relative w-full h-full max-w-full max-h-full">
+              <Image
+                src={scriptImages[currentImageIndex]}
+                alt={`Script preview ${currentImageIndex + 1}`}
+                fill
+                className="object-contain"
+                priority
+              />
+            </div>
+
+            {/* Next Button */}
+            <button
+              onClick={handleNext}
+              className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 z-20 bg-primary/80 hover:bg-primary p-2 sm:p-3 rounded-full transition-all duration-200 hover:scale-110 flex items-center justify-center"
+              aria-label="Next image"
+            >
+              <ChevronRight className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
+            </button>
+          </div>
+
+          {/* Image Counter */}
+          <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-black/60 px-3 py-1 sm:py-2 rounded-full text-xs sm:text-sm text-white font-medium">
+            {currentImageIndex + 1} / {scriptImages.length}
+          </div>
         </div>
 
-        {/* Button */}
+        {/* Footer with Button */}
         <footer className="border-t border-border/50 bg-gradient-to-r from-primary/10 to-secondary/10 px-3 py-3 sm:py-4 flex-shrink-0">
           <Button
             onClick={handleContinue}
