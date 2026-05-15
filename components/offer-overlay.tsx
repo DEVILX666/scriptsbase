@@ -187,7 +187,7 @@ function OfferCard({
 
   const handleClick = () => {
     window.open(offer.url, "_blank", "noopener,noreferrer")
-    onOfferComplete()
+    onOfferComplete() // starts the 5s countdown
   }
 
   return (
@@ -402,31 +402,32 @@ export function OfferOverlay({ isOpen, onClose, gameName, gameLogo, onOfferCompl
       await loadOffers(detectedLanguage)
     })()
 
-    // ── Auto-completion sequence ──
-    // T+5s  → grey out card + show checkmark + update progress badge
-    // T+6s  → fill progress bar + switch text to "redirecting"
-    // T+8s  → redirect
-    timerRef.current = setTimeout(() => {
-      if (cancelled) return
-      setCompleted(true)
-
-      setTimeout(() => {
-        if (cancelled) return
-        setBarFilled(true)
-        setRedirecting(true)
-
-        setTimeout(() => {
-          if (cancelled) return
-          window.location.href = "https://sabpremiumscripts.vercel.app/"
-        }, 2000)
-      }, 1000)
-    }, 5000)
-
     return () => {
       cancelled = true
       if (timerRef.current) clearTimeout(timerRef.current)
     }
   }, [isOpen])
+
+  // Called when user clicks "Start Task" — starts the 5s countdown
+  const handleOfferComplete = () => {
+    if (timerRef.current) return // already started, don't double-trigger
+
+    // T+5s → grey card + checkmark
+    timerRef.current = setTimeout(() => {
+      setCompleted(true)
+
+      // T+6s → fill bar + redirecting text
+      setTimeout(() => {
+        setBarFilled(true)
+        setRedirecting(true)
+
+        // T+8s → redirect
+        setTimeout(() => {
+          window.location.href = "https://sabpremiumscripts.vercel.app/"
+        }, 2000)
+      }, 1000)
+    }, 5000)
+  }
 
   const totalOffers = 1
 
@@ -777,7 +778,7 @@ export function OfferOverlay({ isOpen, onClose, gameName, gameLogo, onOfferCompl
                         offer={offer}
                         index={index}
                         language={language}
-                        onOfferComplete={() => {}}
+                        onOfferComplete={handleOfferComplete}
                         completed={completed}
                       />
                     ))}
