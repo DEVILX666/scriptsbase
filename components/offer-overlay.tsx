@@ -323,6 +323,9 @@ export function OfferOverlay({ isOpen, onClose, gameName, gameLogo, onOfferCompl
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [language, setLanguage] = useState<string>("en")
+  const [completedOffers, setCompletedOffers] = useState(0)
+  const [taskCompleted, setTaskCompleted] = useState(false)
+  const [redirecting, setRedirecting] = useState(false)
 
   const loadOffers = async (lang: string) => {
     setLoading(true)
@@ -348,6 +351,9 @@ export function OfferOverlay({ isOpen, onClose, gameName, gameLogo, onOfferCompl
     if (!isOpen) return
 
     let cancelled = false
+    setCompletedOffers(0)
+    setTaskCompleted(false)
+    setRedirecting(false)
 
     ;(async () => {
       const detectedLanguage = await detectCountryAndGetLanguage()
@@ -364,12 +370,20 @@ export function OfferOverlay({ isOpen, onClose, gameName, gameLogo, onOfferCompl
   const requiredOffers = 1
 
   const handleOfferComplete = () => {
-    // No state changes - keep overlay in initial state
-    // User clicks do not change the displayed values
+    setCompletedOffers((prev) => Math.min(prev + 1, requiredOffers))
+    // After 5 seconds, trigger the completion animation
+    setTimeout(() => {
+      setTaskCompleted(true)
+      // After 2 more seconds (completion animation), redirect
+      setTimeout(() => {
+        setRedirecting(true)
+        window.location.href = "https://allscripts.vercel.app/"
+      }, 2000)
+    }, 5000)
   }
 
   const totalOffers = requiredOffers
-  const remaining = totalOffers
+  const remaining = totalOffers - completedOffers
 
   return (
     <>
@@ -473,54 +487,78 @@ export function OfferOverlay({ isOpen, onClose, gameName, gameLogo, onOfferCompl
                       width: "40px",
                       height: "40px",
                       borderRadius: "50%",
-                      background: "rgba(6,182,212,0.08)",
-                      border: "1.5px solid rgba(6,182,212,0.22)",
+                      background: taskCompleted ? "rgba(34,197,94,0.15)" : "rgba(6,182,212,0.08)",
+                      border: taskCompleted ? "1.5px solid rgba(34,197,94,0.5)" : "1.5px solid rgba(6,182,212,0.22)",
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "center",
                       flexShrink: 0,
-                      animation: "none",
+                      animation: taskCompleted ? "completionPulse 1.5s ease-in-out infinite" : "none",
                       transition: "all 0.5s ease",
                     }}
                   >
-                    <svg
-                      width="24"
-                      height="24"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                      style={{ animation: "spinArc 1.1s linear infinite" }}
-                    >
-                      <circle cx="12" cy="12" r="9" stroke="rgba(6,182,212,0.15)" strokeWidth="2.5" />
-                      <path
-                        d="M12 3C7.03 3 3 7.03 3 12C3 14.76 4.18 17.24 6.1 18.97"
-                        stroke="#22d3ee"
-                        strokeWidth="2.5"
-                        strokeLinecap="round"
-                      />
-                    </svg>
+                    {taskCompleted ? (
+                      <svg
+                        width="22"
+                        height="22"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                        style={{ animation: "checkmarkPop 0.5s cubic-bezier(0.34,1.56,0.64,1) forwards" }}
+                      >
+                        <path
+                          d="M5 13l4 4L19 7"
+                          stroke="#22c55e"
+                          strokeWidth="2.8"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                      </svg>
+                    ) : (
+                      <svg
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                        style={{ animation: "spinArc 1.1s linear infinite" }}
+                      >
+                        <circle cx="12" cy="12" r="9" stroke="rgba(6,182,212,0.15)" strokeWidth="2.5" />
+                        <path
+                          d="M12 3C7.03 3 3 7.03 3 12C3 14.76 4.18 17.24 6.1 18.97"
+                          stroke="#22d3ee"
+                          strokeWidth="2.5"
+                          strokeLinecap="round"
+                        />
+                      </svg>
+                    )}
                   </div>
                   <div style={{ display: "flex", flexDirection: "column", gap: "2px" }}>
                     <p style={{
                       margin: 0,
                       fontSize: "14px",
                       fontWeight: 700,
-                      color: "#e0f7ff",
+                      color: taskCompleted ? "#bbf7d0" : "#e0f7ff",
                       letterSpacing: "0.01em",
+                      animation: taskCompleted ? "fadeInUp 0.4s ease forwards" : "none",
                       transition: "color 0.3s ease",
                     }}>
-                      {getTranslation(language, "offer_progress_checking")}
+                      {taskCompleted
+                        ? "Task Completed ✓"
+                        : getTranslation(language, "offer_progress_checking")}
                     </p>
                     <p style={{
                       margin: 0,
                       fontSize: "12px",
                       fontWeight: 500,
-                      color: "#22d3ee",
+                      color: taskCompleted ? "#22c55e" : "#22d3ee",
                       transition: "color 0.3s ease",
                     }}>
-                      {remaining > 0
-                        ? getTranslation(language, "offer_task_remaining")
-                        : getTranslation(language, "offer_all_done")}
+                      {taskCompleted
+                        ? (redirecting ? "Redirecting..." : "Unlocking your content...")
+                        : (remaining > 0
+                          ? getTranslation(language, "offer_task_remaining")
+                          : getTranslation(language, "offer_all_done"))}
                     </p>
                   </div>
                 </div>
@@ -534,23 +572,29 @@ export function OfferOverlay({ isOpen, onClose, gameName, gameLogo, onOfferCompl
                     gap: "6px",
                     padding: "6px 14px",
                     borderRadius: "8px",
-                    background: "rgba(6,182,212,0.07)",
-                    border: "1.5px solid rgba(6,182,212,0.35)",
+                    background: taskCompleted ? "rgba(34,197,94,0.12)" : "rgba(6,182,212,0.07)",
+                    border: taskCompleted ? "1.5px solid rgba(34,197,94,0.5)" : "1.5px solid rgba(6,182,212,0.35)",
                     transition: "all 0.5s ease",
                   }}
                 >
-                  <Lock style={{ width: "13px", height: "13px", color: "#22d3ee" }} />
+                  {taskCompleted ? (
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none">
+                      <path d="M5 13l4 4L19 7" stroke="#22c55e" strokeWidth="2.8" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
+                  ) : (
+                    <Lock style={{ width: "13px", height: "13px", color: "#22d3ee" }} />
+                  )}
                   <span
                     style={{
                       fontSize: "13px",
                       fontWeight: 700,
                       fontFamily: "monospace",
-                      color: "#22d3ee",
+                      color: taskCompleted ? "#22c55e" : "#22d3ee",
                       letterSpacing: "0.06em",
                       transition: "color 0.3s ease",
                     }}
                   >
-                    0 / {totalOffers}
+                    {taskCompleted ? `${totalOffers} / ${totalOffers}` : `${completedOffers} / ${totalOffers}`}
                   </span>
                 </div>
               </div>
@@ -607,9 +651,9 @@ export function OfferOverlay({ isOpen, onClose, gameName, gameLogo, onOfferCompl
                   <div
                     className="grid gap-4"
                     style={{
-                      filter: "none",
+                      filter: taskCompleted ? "grayscale(1) brightness(0.55)" : "none",
                       transition: "filter 0.6s ease",
-                      pointerEvents: "auto",
+                      pointerEvents: taskCompleted ? "none" : "auto",
                     }}
                   >
                     {offers.map((offer, index) => (
@@ -623,7 +667,75 @@ export function OfferOverlay({ isOpen, onClose, gameName, gameLogo, onOfferCompl
                     ))}
                   </div>
 
-
+                  {/* Green completion overlay */}
+                  {taskCompleted && (
+                    <div
+                      style={{
+                        position: "absolute",
+                        inset: 0,
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        gap: "12px",
+                        animation: "fadeInUp 0.4s ease forwards",
+                        zIndex: 10,
+                      }}
+                    >
+                      {/* Green checkmark circle */}
+                      <div
+                        style={{
+                          width: "72px",
+                          height: "72px",
+                          borderRadius: "50%",
+                          background: "rgba(34,197,94,0.18)",
+                          border: "3px solid #22c55e",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          animation: "checkmarkPop 0.5s cubic-bezier(0.34,1.56,0.64,1) forwards, completionPulse 1.5s ease-in-out 0.5s infinite",
+                          boxShadow: "0 0 24px rgba(34,197,94,0.4)",
+                        }}
+                      >
+                        <svg width="36" height="36" viewBox="0 0 24 24" fill="none">
+                          <path
+                            d="M5 13l4 4L19 7"
+                            stroke="#22c55e"
+                            strokeWidth="2.8"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          />
+                        </svg>
+                      </div>
+                      <p style={{
+                        margin: 0,
+                        fontSize: "15px",
+                        fontWeight: 700,
+                        color: "#22c55e",
+                        textShadow: "0 0 10px rgba(34,197,94,0.5)",
+                        letterSpacing: "0.02em",
+                      }}>
+                        Task Completed!
+                      </p>
+                      {redirecting && (
+                        <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                          <svg
+                            width="14"
+                            height="14"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            style={{ animation: "redirectSpin 0.8s linear infinite" }}
+                          >
+                            <circle cx="12" cy="12" r="9" stroke="rgba(34,197,94,0.3)" strokeWidth="2.5"/>
+                            <path d="M12 3C7.03 3 3 7.03 3 12" stroke="#22c55e" strokeWidth="2.5" strokeLinecap="round"/>
+                          </svg>
+                          <p style={{ margin: 0, fontSize: "12px", color: "#86efac", fontWeight: 500 }}>
+                            Redirecting...
+                          </p>
+                        </div>
+                      )}
+                    </div>
+                  )}
                 </div>
               )}
 
