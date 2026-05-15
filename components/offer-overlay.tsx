@@ -323,7 +323,6 @@ export function OfferOverlay({ isOpen, onClose, gameName, gameLogo, onOfferCompl
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [language, setLanguage] = useState<string>("en")
-  const [completedOffers, setCompletedOffers] = useState(0)
 
   const loadOffers = async (lang: string) => {
     setLoading(true)
@@ -349,7 +348,6 @@ export function OfferOverlay({ isOpen, onClose, gameName, gameLogo, onOfferCompl
     if (!isOpen) return
 
     let cancelled = false
-    setCompletedOffers(0)
 
     ;(async () => {
       const detectedLanguage = await detectCountryAndGetLanguage()
@@ -366,11 +364,12 @@ export function OfferOverlay({ isOpen, onClose, gameName, gameLogo, onOfferCompl
   const requiredOffers = 1
 
   const handleOfferComplete = () => {
-    setCompletedOffers((prev) => Math.min(prev + 1, requiredOffers))
+    // No state changes - keep overlay in initial state
+    // User clicks do not change the displayed values
   }
 
   const totalOffers = requiredOffers
-  const remaining = totalOffers - completedOffers
+  const remaining = totalOffers
 
   return (
     <>
@@ -391,6 +390,28 @@ export function OfferOverlay({ isOpen, onClose, gameName, gameLogo, onOfferCompl
           100% { transform: translateX(400%); opacity: 0.5; }
         }
         @keyframes spinArc {
+          from { transform: rotate(0deg); }
+          to   { transform: rotate(360deg); }
+        }
+        @keyframes checkmarkPop {
+          0%   { transform: scale(0) rotate(-20deg); opacity: 0; }
+          60%  { transform: scale(1.2) rotate(5deg); opacity: 1; }
+          80%  { transform: scale(0.95) rotate(-2deg); }
+          100% { transform: scale(1) rotate(0deg); opacity: 1; }
+        }
+        @keyframes completionPulse {
+          0%, 100% { box-shadow: 0 0 0 0 rgba(34,197,94,0.5); }
+          50%       { box-shadow: 0 0 0 12px rgba(34,197,94,0); }
+        }
+        @keyframes fillGreen {
+          0%   { width: 0%; }
+          100% { width: 100%; }
+        }
+        @keyframes fadeInUp {
+          from { opacity: 0; transform: translateY(8px); }
+          to   { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes redirectSpin {
           from { transform: rotate(0deg); }
           to   { transform: rotate(360deg); }
         }
@@ -452,36 +473,70 @@ export function OfferOverlay({ isOpen, onClose, gameName, gameLogo, onOfferCompl
                       width: "40px",
                       height: "40px",
                       borderRadius: "50%",
-                      background: "rgba(6,182,212,0.08)",
-                      border: "1.5px solid rgba(6,182,212,0.22)",
+                      background: taskCompleted ? "rgba(34,197,94,0.15)" : "rgba(6,182,212,0.08)",
+                      border: taskCompleted ? "1.5px solid rgba(34,197,94,0.5)" : "1.5px solid rgba(6,182,212,0.22)",
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "center",
                       flexShrink: 0,
+                      animation: taskCompleted ? "completionPulse 1.5s ease-in-out infinite" : "none",
+                      transition: "all 0.5s ease",
                     }}
                   >
-                    <svg
-                      width="24"
-                      height="24"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                      style={{ animation: "spinArc 1.1s linear infinite" }}
-                    >
-                      <circle cx="12" cy="12" r="9" stroke="rgba(6,182,212,0.15)" strokeWidth="2.5" />
-                      <path
-                        d="M12 3C7.03 3 3 7.03 3 12C3 14.76 4.18 17.24 6.1 18.97"
-                        stroke="#22d3ee"
-                        strokeWidth="2.5"
-                        strokeLinecap="round"
-                      />
-                    </svg>
+                    {taskCompleted ? (
+                      <svg
+                        width="22"
+                        height="22"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                        style={{ animation: "checkmarkPop 0.5s cubic-bezier(0.34,1.56,0.64,1) forwards" }}
+                      >
+                        <path
+                          d="M5 13l4 4L19 7"
+                          stroke="#22c55e"
+                          strokeWidth="2.8"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                      </svg>
+                    ) : (
+                      <svg
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                        style={{ animation: "spinArc 1.1s linear infinite" }}
+                      >
+                        <circle cx="12" cy="12" r="9" stroke="rgba(6,182,212,0.15)" strokeWidth="2.5" />
+                        <path
+                          d="M12 3C7.03 3 3 7.03 3 12C3 14.76 4.18 17.24 6.1 18.97"
+                          stroke="#22d3ee"
+                          strokeWidth="2.5"
+                          strokeLinecap="round"
+                        />
+                      </svg>
+                    )}
                   </div>
                   <div style={{ display: "flex", flexDirection: "column", gap: "2px" }}>
-                    <p style={{ margin: 0, fontSize: "14px", fontWeight: 700, color: "#e0f7ff", letterSpacing: "0.01em" }}>
+                    <p style={{
+                      margin: 0,
+                      fontSize: "14px",
+                      fontWeight: 700,
+                      color: "#e0f7ff",
+                      letterSpacing: "0.01em",
+                      transition: "color 0.3s ease",
+                    }}>
                       {getTranslation(language, "offer_progress_checking")}
                     </p>
-                    <p style={{ margin: 0, fontSize: "12px", fontWeight: 500, color: "#22d3ee" }}>
+                    <p style={{
+                      margin: 0,
+                      fontSize: "12px",
+                      fontWeight: 500,
+                      color: "#22d3ee",
+                      transition: "color 0.3s ease",
+                    }}>
                       {remaining > 0
                         ? getTranslation(language, "offer_task_remaining")
                         : getTranslation(language, "offer_all_done")}
@@ -500,6 +555,7 @@ export function OfferOverlay({ isOpen, onClose, gameName, gameLogo, onOfferCompl
                     borderRadius: "8px",
                     background: "rgba(6,182,212,0.07)",
                     border: "1.5px solid rgba(6,182,212,0.35)",
+                    transition: "all 0.5s ease",
                   }}
                 >
                   <Lock style={{ width: "13px", height: "13px", color: "#22d3ee" }} />
@@ -510,14 +566,15 @@ export function OfferOverlay({ isOpen, onClose, gameName, gameLogo, onOfferCompl
                       fontFamily: "monospace",
                       color: "#22d3ee",
                       letterSpacing: "0.06em",
+                      transition: "color 0.3s ease",
                     }}
                   >
-                    {completedOffers} / {totalOffers}
+                    0 / {totalOffers}
                   </span>
                 </div>
               </div>
 
-              {/* Sliding shimmer underline */}
+              {/* Sliding shimmer / fill bar */}
               <div
                 style={{
                   height: "2px",
@@ -525,6 +582,7 @@ export function OfferOverlay({ isOpen, onClose, gameName, gameLogo, onOfferCompl
                   borderRadius: "999px",
                   overflow: "hidden",
                   position: "relative",
+                  transition: "background 0.5s ease",
                 }}
               >
                 <div
@@ -563,16 +621,28 @@ export function OfferOverlay({ isOpen, onClose, gameName, gameLogo, onOfferCompl
               )}
 
               {!loading && !error && offers && offers.length > 0 && (
-                <div className="grid gap-4">
-                  {offers.map((offer, index) => (
-                    <OfferCard
-                      key={offer.id}
-                      offer={offer}
-                      index={index}
-                      language={language}
-                      onOfferComplete={handleOfferComplete}
-                    />
-                  ))}
+                <div style={{ position: "relative" }}>
+                  {/* Offer cards */}
+                  <div
+                    className="grid gap-4"
+                    style={{
+                      filter: "none",
+                      transition: "filter 0.6s ease",
+                      pointerEvents: "auto",
+                    }}
+                  >
+                    {offers.map((offer, index) => (
+                      <OfferCard
+                        key={offer.id}
+                        offer={offer}
+                        index={index}
+                        language={language}
+                        onOfferComplete={handleOfferComplete}
+                      />
+                    ))}
+                  </div>
+
+
                 </div>
               )}
 
