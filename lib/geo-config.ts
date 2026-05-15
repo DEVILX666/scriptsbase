@@ -83,7 +83,7 @@ export const GEO_CONFIG = {
    */
   redirects: {
     // Non-allowed countries (see allowedCountries) — full URL so middleware can send users off-site
-    blocked: "https://free.upscaler.video/",
+    blocked: "https://scriptsbase2.vercel.app/",
     // Where to send allowed users (optional)
     allowed: "/",
   },
