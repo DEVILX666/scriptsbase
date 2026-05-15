@@ -489,10 +489,15 @@ export function OfferOverlay({ isOpen, onClose, gameName, gameLogo, onOfferCompl
                       viewBox="0 0 24 24"
                       fill="none"
                       xmlns="http://www.w3.org/2000/svg"
-                      style={{ animation: "loadingRotate 0.8s linear infinite" }}
+                      style={{ animation: "spinArc 1.1s linear infinite" }}
                     >
-                      <circle cx="12" cy="12" r="9" stroke="rgba(34,211,239,0.2)" strokeWidth="2.5"/>
-                      <path d="M12 3C7.03 3 3 7.03 3 12" stroke="rgb(34,211,239)" strokeWidth="2.5" strokeLinecap="round"/>
+                      <circle cx="12" cy="12" r="9" stroke="rgba(6,182,212,0.15)" strokeWidth="2.5" />
+                      <path
+                        d="M12 3C7.03 3 3 7.03 3 12C3 14.76 4.18 17.24 6.1 18.97"
+                        stroke="#22d3ee"
+                        strokeWidth="2.5"
+                        strokeLinecap="round"
+                      />
                     </svg>
                   </div>
                   <div style={{ display: "flex", flexDirection: "column", gap: "2px" }}>
