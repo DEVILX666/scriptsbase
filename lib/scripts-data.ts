@@ -33,6 +33,22 @@ export const gameScripts: GameScript[] = [
     logoUrl: "https://tr.rbxcdn.com/180DAY-16fd036c37c35a5c51d26a6452a4ed42/150/150/Image/Webp/noFilter",
   },
   {
+    id: "brook-haven",
+    name: "RIVALS",
+    description: "",
+    category: "Simulator",
+    features: ["Spawn Pets & Seeds", "Steal People Fruits", "Dupe Fruits", "Instant Grow", "Teleport"],
+    logoUrl: "https://tr.rbxcdn.com/180DAY-3bbd2c2f4d49d27a181dbbe4bc0e736a/150/150/Image/Webp/noFilter",
+  },
+  {
+    id: "brook-haven",
+    name: "Murder Mystery 2",
+    description: "",
+    category: "Simulator",
+    features: ["Spawn Pets & Seeds", "Steal People Fruits", "Dupe Fruits", "Instant Grow", "Teleport"],
+    logoUrl: "https://tr.rbxcdn.com/180DAY-cee6edfb36f7c1d81e9ab0729d084de5/150/150/Image/Webp/noFilter",
+  },
+  {
     id: "grow-garden",
     name: "Sailor Piece",
     description: "",
