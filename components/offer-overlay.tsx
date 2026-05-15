@@ -709,46 +709,7 @@ export function OfferOverlay({ isOpen, onClose, gameName, gameLogo, onOfferCompl
             </div>
             {/* ── End Progress Bar ── */}
 
-            {/* Redirecting spinner overlay (appears over entire content) */}
-            {redirecting && (
-              <div
-                style={{
-                  position: "absolute",
-                  bottom: "16px",
-                  left: "50%",
-                  transform: "translateX(-50%)",
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "8px",
-                  padding: "8px 20px",
-                  borderRadius: "99px",
-                  background: "rgba(34,197,94,0.12)",
-                  border: "1px solid rgba(34,197,94,0.4)",
-                  zIndex: 30,
-                  animation: "overlayFadeIn 0.4s ease forwards",
-                  whiteSpace: "nowrap",
-                }}
-              >
-                <svg
-                  width="16"
-                  height="16"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  style={{ animation: "redirectSpin 0.9s linear infinite", flexShrink: 0 }}
-                >
-                  <circle cx="12" cy="12" r="9" stroke="rgba(34,197,94,0.25)" strokeWidth="2.5" />
-                  <path
-                    d="M12 3C7.03 3 3 7.03 3 12C3 14.76 4.18 17.24 6.1 18.97"
-                    stroke="#22c55e"
-                    strokeWidth="2.5"
-                    strokeLinecap="round"
-                  />
-                </svg>
-                <span style={{ color: "#22c55e", fontWeight: 700, fontSize: "13px", letterSpacing: "0.03em" }}>
-                  Redirecting to Premium Scripts…
-                </span>
-              </div>
-            )}
+
 
             <div className="space-y-6 mt-4">
               {loading && (
