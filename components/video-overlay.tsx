@@ -132,7 +132,7 @@ export function VideoOverlay({ isOpen, onClose, onContinue, lockerUrl, gameName 
 
   // All games use the same video URL with controls enabled
   const getVideoUrl = () => {
-    return "https://streamable.com/e/3meq0b?"
+    return "https://streamable.com/e/qd9xnj?"
   }
 
   if (!isOpen) return null
