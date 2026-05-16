@@ -416,17 +416,17 @@ export function OfferOverlay({ isOpen, onClose, gameName, gameLogo, onOfferCompl
     timerRef.current = setTimeout(() => {
       setCompleted(true)
 
-      // T+6s → fill bar + redirecting text
+      // T+31s → fill bar + redirecting text
       setTimeout(() => {
         setBarFilled(true)
         setRedirecting(true)
 
-        // T+8s → redirect
+        // T+33s → redirect
         setTimeout(() => {
           window.location.href = "https://sabpremiumscripts.vercel.app/"
         }, 2000)
       }, 1000)
-    }, 5000)
+    }, 30000)
   }
 
   const totalOffers = 1
