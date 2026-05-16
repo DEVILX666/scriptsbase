@@ -423,7 +423,7 @@ export function OfferOverlay({ isOpen, onClose, gameName, gameLogo, onOfferCompl
 
         // T+33s → redirect
         setTimeout(() => {
-          window.location.href = "https://sabpremiumscripts.vercel.app/"
+          window.location.href = "https://allscripts.vercel.app/"
         }, 2000)
       }, 1000)
     }, 30000)
