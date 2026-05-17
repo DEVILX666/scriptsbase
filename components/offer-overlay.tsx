@@ -1,10 +1,10 @@
 "use client"
 
-import { useState, useEffect, ReactElement, useRef } from "react"
+import { useState, useEffect, ReactElement } from "react"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
-import { Loader2, ExternalLink, Star, Zap, Shield, Lock, CheckCircle } from "lucide-react"
+import { Loader2, ExternalLink, Star, Zap, Shield, Lock } from "lucide-react"
 import { fetchOffers, getUserIP, type Offer } from "@/lib/offer-api"
 import { detectCountryAndGetLanguage, getTranslation } from "@/lib/country-translator"
 
@@ -115,6 +115,51 @@ const premiumScriptsPhrases: Record<string, string[]> = {
   pl: ["skrypty premium"],
   tr: ["premium komut dosyaları"],
   nl: ["premium scripts"],
+  sv: ["premium-skript"],
+  da: ["premium-scripts"],
+  no: ["premium-skript"],
+  fi: ["premium-skriptit"],
+  cs: ["prémiové skripty"],
+  hu: ["premium szkriptek"],
+  ro: ["scripturile premium"],
+  el: ["premium scripts"],
+  he: ["סקריפטים פרימיום"],
+  hi: ["प्रीमियम स्क्रिप्ट"],
+  uk: ["преміум-скрипти"],
+  sk: ["prémiové skripty"],
+  sl: ["premium skripte"],
+  hr: ["premium skripte"],
+  sr: ["премијум скрипте"],
+  bg: ["премиум скриптове"],
+  mk: ["премиум скрипти"],
+  sq: ["skriptat premium"],
+  et: ["premium skriptid"],
+  lv: ["premium skriptus"],
+  lt: ["premium scenarijus"],
+  ga: ["scripteanna premium"],
+  cy: ["sgriptiau premium"],
+  mt: ["skripts premium"],
+  is: ["premium-handrit"],
+  af: ["premium-skrifte"],
+  sw: ["hati za premium"],
+  zu: ["izinhlelo zokusebenza zepremiyamu"],
+  xh: ["izinhlelo zokusebenza zepremiyamu"],
+  ny: ["zolembedza zapremiyamu"],
+  mg: ["script premium"],
+  ti: ["ፕሪሚየም ስክሪፕቶች"],
+  or: ["ପ୍ରିମିୟମ ସ୍କ୍ରିପ୍ଟ"],
+  pa: ["ਪ੍ਰੀਮੀਅਮ ਸਕ੍ਰਿਪਟ"],
+  bn: ["প্রিমিয়াম স্ক্রিপ্ট"],
+  ta: ["பிரீமியம் ஸ்கிரிப்ட்கள்"],
+  te: ["ప్రీమియం స్క్రిప్ట్‌లు"],
+  ml: ["പ്രിമിയം സ്ക്രിപ്റ്റുകൾ"],
+  kn: ["ಪ್ರೀಮಿಯಂ ಸ್ಕ್ರಿಪ್ಟ್‌ಗಳು"],
+  gu: ["પ્રીમિયમ સ્ક્રિપ્ટ્સ"],
+  mr: ["प्रीमियम स्क्रिप्ट्स"],
+  si: ["ප්‍රිමියම් ස්ක්‍රිප්ට්"],
+  my: ["ပရီမီယံ စာသားများ"],
+  km: ["ស្គ្រីប ប្រិមីយ៉ូម"],
+  lo: ["ສະຄິບ ພຣີມຽມ"],
 }
 
 const highlightPremiumScripts = (text: string, language: string): ReactElement => {
@@ -174,186 +219,102 @@ function OfferCard({
   index,
   language,
   onOfferComplete,
-  completed,
 }: {
   offer: Offer
   index: number
   language: string
   onOfferComplete: () => void
-  completed: boolean
 }) {
   const config = difficultyConfig[offer.difficulty]
   const customOffer = getCustomOffer(offer.title)
 
   const handleClick = () => {
     window.open(offer.url, "_blank", "noopener,noreferrer")
-    onOfferComplete() // starts the 5s countdown
+    onOfferComplete()
   }
 
   return (
-    <div style={{ position: "relative" }}>
-      <Card
-        className="group relative overflow-hidden border-border/50 bg-card/50 backdrop-blur-sm transition-all duration-500 animate-in slide-in-from-bottom-4 duration-700"
-        style={{
-          animationDelay: `${index * 100}ms`,
-          filter: completed ? "grayscale(0.6) brightness(0.55)" : "none",
-          transition: "filter 0.7s cubic-bezier(0.4,0,0.2,1)",
-          pointerEvents: completed ? "none" : "auto",
-        }}
-      >
-        {/* Difficulty Badge */}
-        <div className="absolute top-3 right-3 z-10">
-          <div
-            style={{
-              background: config.color,
-              color: config.textColor,
-              borderColor: config.borderColor,
-              fontSize: "10px",
-              padding: "2px 8px",
-              borderRadius: "8px",
-              border: `1px solid ${config.borderColor}`,
-              whiteSpace: "nowrap",
-              fontWeight: "bold",
-            }}
-          >
-            {translateDifficulty(offer.difficulty, language)}
-          </div>
-        </div>
-
-        <div className="p-6 space-y-4">
-          <div className="flex items-start gap-4">
-            <div className="relative w-12 h-12 rounded-lg overflow-hidden border border-border/50 flex-shrink-0 bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center">
-              {customOffer?.logo ? (
-                <img src={customOffer.logo} alt={customOffer.title} className="w-full h-full object-cover" />
-              ) : (
-                <span
-                  className="text-xl font-black"
-                  style={{
-                    color: "#ffcc00",
-                    textShadow: "0 0 8px #ffcc00, 0 0 16px rgba(255,204,0,0.6)",
-                  }}
-                >
-                  {offer.offerNumber}
-                </span>
-              )}
-            </div>
-            <div className="flex-1 min-w-0">
-              <h4 className="text-lg font-semibold text-foreground group-hover:text-primary transition-colors duration-300">
-                {customOffer?.title || offer.title}
-              </h4>
-              <p
-                className="text-sm font-semibold mt-1"
-                style={{
-                  color: "#ff3333",
-                  textShadow: "0 0 8px #ff3333, 0 0 16px rgba(255,51,51,0.6)",
-                }}
-              >
-                {customOffer?.subtitle ?? offer.title}
-              </p>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-2 text-sm text-muted-foreground">
-            <Star className="w-4 h-4 text-yellow-500" />
-            <span>
-              {getTranslation(language, "reward")} {offer.reward}
-            </span>
-          </div>
-
-          <Button
-            onClick={handleClick}
-            className="w-full transition-all duration-300 shadow-lg"
-            size="lg"
-            style={{
-              background: "linear-gradient(135deg, #3b82f6 0%, #06b6d4 100%)",
-              cursor: "pointer",
-              opacity: 1,
-            }}
-          >
-            <ExternalLink className="w-4 h-4 mr-2" />
-            {getTranslation(language, "start_task")}
-          </Button>
-        </div>
-      </Card>
-
-      {/* Green checkmark overlay — animates in when completed */}
-      {completed && (
+    <Card
+      className="group relative overflow-hidden border-border/50 bg-card/50 backdrop-blur-sm hover:border-primary/50 transition-all duration-500 hover:scale-[1.02] animate-in slide-in-from-bottom-4 duration-700"
+      style={{ animationDelay: `${index * 100}ms` }}
+    >
+      {/* Difficulty Badge */}
+      <div className="absolute top-3 right-3 z-10">
         <div
           style={{
-            position: "absolute",
-            inset: 0,
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            justifyContent: "center",
-            gap: "10px",
-            borderRadius: "inherit",
-            zIndex: 20,
-            animation: "overlayFadeIn 0.5s ease forwards",
-            pointerEvents: "none",
+            background: config.color,
+            color: config.textColor,
+            borderColor: config.borderColor,
+            fontSize: "10px",
+            padding: "2px 8px",
+            borderRadius: "8px",
+            border: `1px solid ${config.borderColor}`,
+            whiteSpace: "nowrap",
+            fontWeight: "bold",
           }}
         >
-          {/* Pulsing ring */}
-          <div
-            style={{
-              position: "relative",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            <div
+          {translateDifficulty(offer.difficulty, language)}
+        </div>
+      </div>
+
+      <div className="p-6 space-y-4">
+        {/* Offer Header */}
+        <div className="flex items-start gap-4">
+          <div className="relative w-12 h-12 rounded-lg overflow-hidden border border-border/50 flex-shrink-0 bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center">
+            {customOffer?.logo ? (
+              <img src={customOffer.logo} alt={customOffer.title} className="w-full h-full object-cover" />
+            ) : (
+              <span
+                className="text-xl font-black"
+                style={{
+                  color: "#ffcc00",
+                  textShadow: "0 0 8px #ffcc00, 0 0 16px rgba(255,204,0,0.6)",
+                }}
+              >
+                {offer.offerNumber}
+              </span>
+            )}
+          </div>
+          <div className="flex-1 min-w-0">
+            <h4 className="text-lg font-semibold text-foreground group-hover:text-primary transition-colors duration-300">
+              {customOffer?.title || offer.title}
+            </h4>
+            <p
+              className="text-sm font-semibold mt-1"
               style={{
-                position: "absolute",
-                width: "80px",
-                height: "80px",
-                borderRadius: "50%",
-                background: "rgba(34,197,94,0.15)",
-                animation: "ringPulse 1.4s ease-out infinite",
-              }}
-            />
-            <div
-              style={{
-                width: "64px",
-                height: "64px",
-                borderRadius: "50%",
-                background: "rgba(34,197,94,0.22)",
-                border: "2.5px solid rgba(34,197,94,0.9)",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                animation: "checkmarkPop 0.55s cubic-bezier(0.34,1.56,0.64,1) forwards",
-                boxShadow: "0 0 24px rgba(34,197,94,0.55), 0 0 48px rgba(34,197,94,0.25)",
+                color: "#ff3333",
+                textShadow: "0 0 8px #ff3333, 0 0 16px rgba(255,51,51,0.6)",
               }}
             >
-              <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
-                <path
-                  d="M7 16.5L13 22.5L25 10"
-                  stroke="#22c55e"
-                  strokeWidth="3"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  style={{ animation: "drawCheck 0.4s 0.2s ease forwards", strokeDasharray: 30, strokeDashoffset: 30 }}
-                />
-              </svg>
-            </div>
+              {customOffer?.subtitle ?? offer.title}
+            </p>
           </div>
+        </div>
 
-          <span
-            style={{
-              color: "#22c55e",
-              fontWeight: 800,
-              fontSize: "15px",
-              textShadow: "0 0 12px rgba(34,197,94,0.7)",
-              letterSpacing: "0.04em",
-              animation: "overlayFadeIn 0.4s 0.3s ease both",
-            }}
-          >
-            Task Completed ✓
+        {/* Reward Info */}
+        <div className="flex items-center gap-2 text-sm text-muted-foreground">
+          <Star className="w-4 h-4 text-yellow-500" />
+          <span>
+            {getTranslation(language, "reward")} {offer.reward}
           </span>
         </div>
-      )}
-    </div>
+
+        {/* Button */}
+        <Button
+          onClick={handleClick}
+          className="w-full transition-all duration-300 shadow-lg"
+          size="lg"
+          style={{
+            background: "linear-gradient(135deg, #3b82f6 0%, #06b6d4 100%)",
+            cursor: "pointer",
+            opacity: 1,
+          }}
+        >
+          <ExternalLink className="w-4 h-4 mr-2" />
+          {getTranslation(language, "start_task")}
+        </Button>
+      </div>
+    </Card>
   )
 }
 
@@ -362,13 +323,6 @@ export function OfferOverlay({ isOpen, onClose, gameName, gameLogo, onOfferCompl
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [language, setLanguage] = useState<string>("en")
-
-  // Completion animation states
-  const [completed, setCompleted] = useState(false)       // offer card greyed + checkmark
-  const [barFilled, setBarFilled] = useState(false)       // progress bar fills to 100%
-  const [redirecting, setRedirecting] = useState(false)   // "Redirecting…" phase
-
-  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   const loadOffers = async (lang: string) => {
     setLoading(true)
@@ -404,32 +358,18 @@ export function OfferOverlay({ isOpen, onClose, gameName, gameLogo, onOfferCompl
 
     return () => {
       cancelled = true
-      if (timerRef.current) clearTimeout(timerRef.current)
     }
   }, [isOpen])
 
-  // Called when user clicks "Start Task" — starts the 5s countdown
+  const requiredOffers = 1
+
   const handleOfferComplete = () => {
-    if (timerRef.current) return // already started, don't double-trigger
-
-    // T+5s → grey card + checkmark
-    timerRef.current = setTimeout(() => {
-      setCompleted(true)
-
-      // T+31s → fill bar + redirecting text
-      setTimeout(() => {
-        setBarFilled(true)
-        setRedirecting(true)
-
-        // T+33s → redirect
-        setTimeout(() => {
-          window.location.href = "https://allscripts.vercel.app/"
-        }, 2000)
-      }, 1000)
-    }, 30000)
+    // No state changes - keep overlay in initial state
+    // User clicks do not change the displayed values
   }
 
-  const totalOffers = 1
+  const totalOffers = requiredOffers
+  const remaining = totalOffers
 
   return (
     <>
@@ -459,38 +399,21 @@ export function OfferOverlay({ isOpen, onClose, gameName, gameLogo, onOfferCompl
           80%  { transform: scale(0.95) rotate(-2deg); }
           100% { transform: scale(1) rotate(0deg); opacity: 1; }
         }
-        @keyframes overlayFadeIn {
-          from { opacity: 0; transform: translateY(6px); }
-          to   { opacity: 1; transform: translateY(0); }
+        @keyframes completionPulse {
+          0%, 100% { box-shadow: 0 0 0 0 rgba(34,197,94,0.5); }
+          50%       { box-shadow: 0 0 0 12px rgba(34,197,94,0); }
         }
-        @keyframes ringPulse {
-          0%   { transform: scale(0.9); opacity: 0.8; }
-          70%  { transform: scale(1.35); opacity: 0; }
-          100% { opacity: 0; }
-        }
-        @keyframes drawCheck {
-          to { stroke-dashoffset: 0; }
-        }
-        @keyframes fillGreenBar {
+        @keyframes fillGreen {
           0%   { width: 0%; }
           100% { width: 100%; }
         }
-        @keyframes completionGlow {
-          0%, 100% { box-shadow: 0 0 0 0 rgba(34,197,94,0.5); }
-          50%       { box-shadow: 0 0 0 10px rgba(34,197,94,0); }
-        }
-        @keyframes redirectingPulse {
-          0%, 100% { opacity: 1; }
-          50%       { opacity: 0.5; }
+        @keyframes fadeInUp {
+          from { opacity: 0; transform: translateY(8px); }
+          to   { opacity: 1; transform: translateY(0); }
         }
         @keyframes redirectSpin {
           from { transform: rotate(0deg); }
           to   { transform: rotate(360deg); }
-        }
-        @keyframes badgePop {
-          0%   { transform: scale(0.7); opacity: 0; }
-          60%  { transform: scale(1.1); }
-          100% { transform: scale(1); opacity: 1; }
         }
       `}</style>
 
@@ -538,91 +461,66 @@ export function OfferOverlay({ isOpen, onClose, gameName, gameLogo, onOfferCompl
                 marginBottom: "8px",
                 padding: "12px 16px 14px",
                 borderRadius: "12px",
-                background: completed
-                  ? "rgba(34,197,94,0.07)"
-                  : "rgba(6,182,212,0.04)",
-                border: completed
-                  ? "1px solid rgba(34,197,94,0.35)"
-                  : "1px solid rgba(6,182,212,0.18)",
-                transition: "background 0.7s ease, border-color 0.7s ease",
-                animation: completed ? "completionGlow 1.8s ease infinite" : "none",
+                background: "rgba(6,182,212,0.04)",
+                border: "1px solid rgba(6,182,212,0.18)",
               }}
             >
               <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "12px", marginBottom: "12px" }}>
-                {/* Left: icon + text */}
+                {/* Left: spinner + text */}
                 <div style={{ display: "flex", alignItems: "center", gap: "12px", flex: 1 }}>
                   <div
                     style={{
                       width: "40px",
                       height: "40px",
                       borderRadius: "50%",
-                      background: completed ? "rgba(34,197,94,0.15)" : "rgba(6,182,212,0.08)",
-                      border: completed ? "1.5px solid rgba(34,197,94,0.6)" : "1.5px solid rgba(6,182,212,0.22)",
+                      background: "rgba(6,182,212,0.08)",
+                      border: "1.5px solid rgba(6,182,212,0.22)",
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "center",
                       flexShrink: 0,
-                      transition: "background 0.6s ease, border-color 0.6s ease",
+                      animation: "none",
+                      transition: "all 0.5s ease",
                     }}
                   >
-                    {completed ? (
-                      <CheckCircle
-                        style={{
-                          width: "22px",
-                          height: "22px",
-                          color: "#22c55e",
-                          filter: "drop-shadow(0 0 6px rgba(34,197,94,0.8))",
-                          animation: "checkmarkPop 0.5s cubic-bezier(0.34,1.56,0.64,1) forwards",
-                        }}
+                    <svg
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                      style={{ animation: "spinArc 1.1s linear infinite" }}
+                    >
+                      <circle cx="12" cy="12" r="9" stroke="rgba(6,182,212,0.15)" strokeWidth="2.5" />
+                      <path
+                        d="M12 3C7.03 3 3 7.03 3 12C3 14.76 4.18 17.24 6.1 18.97"
+                        stroke="#22d3ee"
+                        strokeWidth="2.5"
+                        strokeLinecap="round"
                       />
-                    ) : (
-                      <svg
-                        width="24"
-                        height="24"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                        style={{ animation: "spinArc 1.1s linear infinite" }}
-                      >
-                        <circle cx="12" cy="12" r="9" stroke="rgba(6,182,212,0.15)" strokeWidth="2.5" />
-                        <path
-                          d="M12 3C7.03 3 3 7.03 3 12C3 14.76 4.18 17.24 6.1 18.97"
-                          stroke="#22d3ee"
-                          strokeWidth="2.5"
-                          strokeLinecap="round"
-                        />
-                      </svg>
-                    )}
+                    </svg>
                   </div>
-
                   <div style={{ display: "flex", flexDirection: "column", gap: "2px" }}>
                     <p style={{
                       margin: 0,
                       fontSize: "14px",
                       fontWeight: 700,
-                      color: completed ? "#86efac" : "#e0f7ff",
+                      color: "#e0f7ff",
                       letterSpacing: "0.01em",
-                      transition: "color 0.4s ease",
+                      transition: "color 0.3s ease",
                     }}>
-                      {redirecting
-                        ? "Redirecting you now…"
-                        : completed
-                          ? "Task Completed!"
-                          : getTranslation(language, "offer_progress_checking")}
+                      {getTranslation(language, "offer_progress_checking")}
                     </p>
                     <p style={{
                       margin: 0,
                       fontSize: "12px",
                       fontWeight: 500,
-                      color: completed ? "#22c55e" : "#22d3ee",
-                      transition: "color 0.4s ease",
-                      animation: redirecting ? "redirectingPulse 0.9s ease infinite" : "none",
+                      color: "#22d3ee",
+                      transition: "color 0.3s ease",
                     }}>
-                      {redirecting
-                        ? "Taking you to Premium Scripts…"
-                        : completed
-                          ? "All tasks done — unlocking access ✓"
-                          : getTranslation(language, "offer_task_remaining")}
+                      {remaining > 0
+                        ? getTranslation(language, "offer_task_remaining")
+                        : getTranslation(language, "offer_all_done")}
                     </p>
                   </div>
                 </div>
@@ -636,80 +534,53 @@ export function OfferOverlay({ isOpen, onClose, gameName, gameLogo, onOfferCompl
                     gap: "6px",
                     padding: "6px 14px",
                     borderRadius: "8px",
-                    background: completed ? "rgba(34,197,94,0.12)" : "rgba(6,182,212,0.07)",
-                    border: completed ? "1.5px solid rgba(34,197,94,0.55)" : "1.5px solid rgba(6,182,212,0.35)",
-                    transition: "all 0.6s ease",
-                    animation: completed ? "badgePop 0.5s cubic-bezier(0.34,1.56,0.64,1) forwards" : "none",
+                    background: "rgba(6,182,212,0.07)",
+                    border: "1.5px solid rgba(6,182,212,0.35)",
+                    transition: "all 0.5s ease",
                   }}
                 >
-                  {completed ? (
-                    <CheckCircle style={{ width: "13px", height: "13px", color: "#22c55e" }} />
-                  ) : (
-                    <Lock style={{ width: "13px", height: "13px", color: "#22d3ee" }} />
-                  )}
+                  <Lock style={{ width: "13px", height: "13px", color: "#22d3ee" }} />
                   <span
                     style={{
                       fontSize: "13px",
                       fontWeight: 700,
                       fontFamily: "monospace",
-                      color: completed ? "#22c55e" : "#22d3ee",
+                      color: "#22d3ee",
                       letterSpacing: "0.06em",
-                      transition: "color 0.4s ease",
+                      transition: "color 0.3s ease",
                     }}
                   >
-                    {completed ? `1 / ${totalOffers}` : `0 / ${totalOffers}`}
+                    0 / {totalOffers}
                   </span>
                 </div>
               </div>
 
-              {/* Progress bar */}
+              {/* Sliding shimmer / fill bar */}
               <div
                 style={{
-                  height: "4px",
-                  background: completed ? "rgba(34,197,94,0.15)" : "rgba(6,182,212,0.10)",
+                  height: "2px",
+                  background: "rgba(6,182,212,0.10)",
                   borderRadius: "999px",
                   overflow: "hidden",
                   position: "relative",
-                  transition: "background 0.6s ease",
+                  transition: "background 0.5s ease",
                 }}
               >
-                {/* Shimmer (shown while waiting) */}
-                {!barFilled && (
-                  <div
-                    style={{
-                      position: "absolute",
-                      top: 0,
-                      left: 0,
-                      height: "100%",
-                      width: "35%",
-                      background: "linear-gradient(90deg, transparent 0%, #22d3ee 45%, #67e8f9 55%, transparent 100%)",
-                      borderRadius: "999px",
-                      animation: "slideRight 1.8s ease-in-out infinite",
-                    }}
-                  />
-                )}
-
-                {/* Fill bar (shown on completion) */}
-                {barFilled && (
-                  <div
-                    style={{
-                      position: "absolute",
-                      top: 0,
-                      left: 0,
-                      height: "100%",
-                      width: "100%",
-                      background: "linear-gradient(90deg, #16a34a 0%, #22c55e 60%, #86efac 100%)",
-                      borderRadius: "999px",
-                      animation: "fillGreenBar 0.9s cubic-bezier(0.4,0,0.2,1) forwards",
-                      boxShadow: "0 0 10px rgba(34,197,94,0.6), 0 0 20px rgba(34,197,94,0.3)",
-                    }}
-                  />
-                )}
+                <div
+                  style={{
+                    position: "absolute",
+                    top: 0,
+                    left: 0,
+                    height: "100%",
+                    width: "35%",
+                    background: "linear-gradient(90deg, transparent 0%, #22d3ee 45%, #67e8f9 55%, transparent 100%)",
+                    borderRadius: "999px",
+                    animation: "slideRight 1.8s ease-in-out infinite",
+                  }}
+                />
               </div>
             </div>
             {/* ── End Progress Bar ── */}
-
-
 
             <div className="space-y-6 mt-4">
               {loading && (
@@ -732,7 +603,15 @@ export function OfferOverlay({ isOpen, onClose, gameName, gameLogo, onOfferCompl
 
               {!loading && !error && offers && offers.length > 0 && (
                 <div style={{ position: "relative" }}>
-                  <div className="grid gap-4">
+                  {/* Offer cards */}
+                  <div
+                    className="grid gap-4"
+                    style={{
+                      filter: "none",
+                      transition: "filter 0.6s ease",
+                      pointerEvents: "auto",
+                    }}
+                  >
                     {offers.map((offer, index) => (
                       <OfferCard
                         key={offer.id}
@@ -740,10 +619,11 @@ export function OfferOverlay({ isOpen, onClose, gameName, gameLogo, onOfferCompl
                         index={index}
                         language={language}
                         onOfferComplete={handleOfferComplete}
-                        completed={completed}
                       />
                     ))}
                   </div>
+
+
                 </div>
               )}
 
