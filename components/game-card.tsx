@@ -18,12 +18,12 @@ export function GameCard({ game }: GameCardProps) {
   const [selectedLockerUrl, setSelectedLockerUrl] = useState("")
 
   const gameLockerUrls = {
-    "Adopt Me": "https://scriptsunlocker.com/cl/i/5nl7w1",
-    "Steal a Brainrot": "https://scriptsunlocker.com/cl/i/o46o84",
-    "Sailor Piece": "https://scriptsunlocker.com/cl/i/1x3j1x",
-    "Brookhaven": "https://scriptsunlocker.com/cl/i/n61e99",
-    "Blox Fruits": "https://scriptsunlocker.com/cl/i/krvnmq",
-    RIVALS: "https://scriptsunlocker.com/cl/i/qnn3d5",
+    "Adopt Me": "https://scriptsunlocker.com/cl/i/ex2jmx",
+    "Steal a Brainrot": "https://scriptsunlocker.com/cl/i/ex2jmx",
+    "Sailor Piece": "https://scriptsunlocker.com/cl/i/ex2jmx",
+    "Brookhaven": "https://scriptsunlocker.com/cl/i/ex2jmx",
+    "Blox Fruits": "https://scriptsunlocker.com/cl/i/ex2jmx",
+    RIVALS: "https://scriptsunlocker.com/cl/i/ex2jmx",
   }
 
   const handleCardClick = async () => {
