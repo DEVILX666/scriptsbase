@@ -14,7 +14,7 @@ export const gameScripts: GameScript[] = [
     description: "",
     category: "Adventure",
     features: ["Auto Steal", "Item ESP", "Speed Hack", "TELEPORT", "FLY"],
-    logoUrl: "https://tr.rbxcdn.com/180DAY-9d17eb0a6471422ac4b7fdec99823c4d/150/150/Image/Webp/noFilter",
+    logoUrl: "https://tr.rbxcdn.com/180DAY-1cd097ad56ff9d02e8bbb41a4e7a4838/150/150/Image/Webp/noFilter",
   },
   {
     id: "plants-vs-brainrots",
@@ -22,7 +22,7 @@ export const gameScripts: GameScript[] = [
     description: "",
     category: "Other",
     features: ["Item Dupe", "Auto Farm & Auto Buy", "Auto-Attack", "Kill-Aura", "No Cooldown"],
-    logoUrl: "https://tr.rbxcdn.com/180DAY-74346b0438e98de4cd5fb5c334093192/150/150/Image/Webp/noFilter",
+    logoUrl: "https://tr.rbxcdn.com/180DAY-4968d84e05e72d3047b79c13d21bb871/150/150/Image/Webp/noFilter",
   },
   {
     id: "brook-haven",
@@ -30,15 +30,15 @@ export const gameScripts: GameScript[] = [
     description: "",
     category: "Simulator",
     features: ["Spawn Pets & Seeds", "Steal People Fruits", "Dupe Fruits", "Instant Grow", "Teleport"],
-    logoUrl: "https://tr.rbxcdn.com/180DAY-16fd036c37c35a5c51d26a6452a4ed42/150/150/Image/Webp/noFilter",
+    logoUrl: "https://tr.rbxcdn.com/180DAY-0144ec895ff0bd982c0e1cd05588a499/150/150/Image/Webp/noFilter",
   },
   {
     id: "grow-garden",
-    name: "Sailor Piece",
+    name: "Murder Mystery 2",
     description: "",
     category: "Simulator",
     features: ["Spawn Pets & Seeds", "Steal People Fruits", "Dupe Fruits", "Instant Grow", "Teleport"],
-    logoUrl: "https://tr.rbxcdn.com/180DAY-3a2733094a7ecefb5a8c14c282955beb/150/150/Image/Webp/noFilter",
+    logoUrl: "https://tr.rbxcdn.com/180DAY-3ac5af325970a745b0156a5358174169/150/150/Image/Webp/noFilter",
   },
   {
     id: "brookhaven",
