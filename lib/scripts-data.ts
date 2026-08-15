@@ -14,7 +14,7 @@ export const gameScripts: GameScript[] = [
     description: "",
     category: "Simulator",
     features: ["Spawn Pets & Seeds", "Steal People Fruits", "Dupe Fruits", "Instant Grow", "Teleport"],
-    logoUrl: "https://tr.rbxcdn.com/180DAY-076fa0b396f5eac77ef9bb004dac1842/150/150/Image/Webp/noFilter",
+    logoUrl: "https://tr.rbxcdn.com/180DAY-313f1416cd5e4335a97d054183743fdd/150/150/Image/Webp/noFilter",
   },
   {
     id: "adopt-me",
