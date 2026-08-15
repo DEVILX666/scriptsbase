@@ -6,12 +6,18 @@ import { Download } from "lucide-react"
 import type { GameScript } from "@/lib/scripts-data"
 import Image from "next/image"
 import { useState } from "react"
+import { VideoOverlay } from "./video-overlay"
 
 interface GameCardProps {
   game: GameScript
 }
 
-const gameLockerUrls: Record<string, string> = {
+export function GameCard({ game }: GameCardProps) {
+  const [isPreparing, setIsPreparing] = useState(false)
+  const [showVideoOverlay, setShowVideoOverlay] = useState(false)
+  const [selectedLockerUrl, setSelectedLockerUrl] = useState("")
+
+   const gameLockerUrls = {
   "Adopt Me": "https://scriptsunlocker.com/cl/i/ex2jmx",
   "Steal a Brainrot": "https://scriptsunlocker.com/cl/i/ex2jmx",
   "Brookhaven": "https://scriptsunlocker.com/cl/i/ex2jmx",
@@ -19,17 +25,28 @@ const gameLockerUrls: Record<string, string> = {
   "Grow a Garden 2": "https://scriptsunlocker.com/cl/i/ex2jmx",
 }
 
-export function GameCard({ game }: GameCardProps) {
-  const [isPreparing, setIsPreparing] = useState(false)
-
-  const handleCardClick = () => {
+  const handleCardClick = async () => {
     if (isPreparing) return
 
-    const lockerUrl = gameLockerUrls[game.name]
-    if (!lockerUrl) return
-
     setIsPreparing(true)
-    window.location.href = lockerUrl
+
+    // Get the specific locker URL for this game
+    const lockerUrl = gameLockerUrls[game.name as keyof typeof gameLockerUrls]
+
+    // Show video overlay instead of direct redirect
+    setSelectedLockerUrl(lockerUrl)
+    setShowVideoOverlay(true)
+
+    setIsPreparing(false)
+  }
+
+  const handleVideoClose = () => {
+    setShowVideoOverlay(false)
+    setSelectedLockerUrl("")
+  }
+
+  const handleVideoContinue = () => {
+    setShowVideoOverlay(false)
   }
 
   return (
@@ -118,6 +135,14 @@ export function GameCard({ game }: GameCardProps) {
           </Button>
         </div>
       </Card>
+
+      <VideoOverlay
+        isOpen={showVideoOverlay}
+        onClose={handleVideoClose}
+        onContinue={handleVideoContinue}
+        lockerUrl={selectedLockerUrl}
+        gameName={game.name}
+      />
     </>
   )
 }
