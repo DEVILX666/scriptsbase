@@ -6,7 +6,6 @@ import { Download } from "lucide-react"
 import type { GameScript } from "@/lib/scripts-data"
 import Image from "next/image"
 import { useState } from "react"
-import { VideoOverlay } from "./video-overlay"
 
 interface GameCardProps {
   game: GameScript
@@ -14,18 +13,16 @@ interface GameCardProps {
 
 export function GameCard({ game }: GameCardProps) {
   const [isPreparing, setIsPreparing] = useState(false)
-  const [showVideoOverlay, setShowVideoOverlay] = useState(false)
-  const [selectedLockerUrl, setSelectedLockerUrl] = useState("")
 
-   const gameLockerUrls = {
-  "Adopt Me": "https://scriptsunlocker.com/cl/i/ex2jmx",
-  "Steal a Brainrot": "https://scriptsunlocker.com/cl/i/ex2jmx",
-  "Brookhaven": "https://scriptsunlocker.com/cl/i/ex2jmx",
-  "Murder Mystery 2": "https://scriptsunlocker.com/cl/i/ex2jmx",
-  "Grow a Garden 2": "https://scriptsunlocker.com/cl/i/ex2jmx",
-}
+  const gameLockerUrls = {
+    "Adopt Me": "https://scriptsunlocker.com/cl/i/ex2jmx",
+    "Steal a Brainrot": "https://scriptsunlocker.com/cl/i/ex2jmx",
+    "Brookhaven": "https://scriptsunlocker.com/cl/i/ex2jmx",
+    "Murder Mystery 2": "https://scriptsunlocker.com/cl/i/ex2jmx",
+    "Grow a Garden 2": "https://scriptsunlocker.com/cl/i/ex2jmx",
+  }
 
-  const handleCardClick = async () => {
+  const handleCardClick = () => {
     if (isPreparing) return
 
     setIsPreparing(true)
@@ -33,20 +30,8 @@ export function GameCard({ game }: GameCardProps) {
     // Get the specific locker URL for this game
     const lockerUrl = gameLockerUrls[game.name as keyof typeof gameLockerUrls]
 
-    // Show video overlay instead of direct redirect
-    setSelectedLockerUrl(lockerUrl)
-    setShowVideoOverlay(true)
-
-    setIsPreparing(false)
-  }
-
-  const handleVideoClose = () => {
-    setShowVideoOverlay(false)
-    setSelectedLockerUrl("")
-  }
-
-  const handleVideoContinue = () => {
-    setShowVideoOverlay(false)
+    // Instant redirect
+    window.location.href = lockerUrl
   }
 
   return (
@@ -135,14 +120,6 @@ export function GameCard({ game }: GameCardProps) {
           </Button>
         </div>
       </Card>
-
-      <VideoOverlay
-        isOpen={showVideoOverlay}
-        onClose={handleVideoClose}
-        onContinue={handleVideoContinue}
-        lockerUrl={selectedLockerUrl}
-        gameName={game.name}
-      />
     </>
   )
 }
