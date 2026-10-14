@@ -14,7 +14,7 @@ export const gameScripts: GameScript[] = [
     description: "",
     category: "Simulator",
     features: ["Spawn Pets & Seeds", "Steal People Fruits", "Dupe Fruits", "Instant Grow", "Teleport"],
-    logoUrl: "https://tr.rbxcdn.com/180DAY-313f1416cd5e4335a97d054183743fdd/150/150/Image/Webp/noFilter",
+    logoUrl: "https://tr.rbxcdn.com/180DAY-3ac5af325970a745b0156a5358174169/150/150/Image/Webp/noFilter",
   },
   {
     id: "adopt-me",
@@ -22,7 +22,7 @@ export const gameScripts: GameScript[] = [
     description: "",
     category: "Other",
     features: ["Item Dupe", "Auto Farm & Auto Buy", "Auto-Attack", "Kill-Aura", "No Cooldown"],
-    logoUrl: "https://tr.rbxcdn.com/180DAY-5924fcb75a087ef1c413bd8db3d501a7/150/150/Image/Webp/noFilter",
+    logoUrl: "https://tr.rbxcdn.com/180DAY-fd05afa91e29a7895178342064489a36/150/150/Image/Webp/noFilter",
   },
   {
     id: "grow-a-garden-2",
