@@ -19,10 +19,10 @@ export function GameCard({ game }: GameCardProps) {
 
   const gameLockerUrls = {
     "Adopt Me": "https://scriptsunlocker.com/cl/i/ex2jmx",
-    "Steal a Brainrot": "https://scriptsunlocker.com/cl/i/ex2jmx",
+    "Throw Food For Animals": "https://scriptsunlocker.com/cl/i/ex2jmx",
     "Brookhaven": "https://scriptsunlocker.com/cl/i/ex2jmx",
     "Murder Mystery 2": "https://scriptsunlocker.com/cl/i/ex2jmx",
-    "Grow a Garden 2": "https://scriptsunlocker.com/cl/i/ex2jmx",
+    "Steal An Egg": "https://scriptsunlocker.com/cl/i/ex2jmx",
   }
 
   const handleCardClick = () => {
